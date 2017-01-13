@@ -1,4 +1,8 @@
 language: python
 python:
-  - 3.5
-script: python3 test.py
+  - "3.5"
+install:
+  - "pyvenv .env"
+  - ". .env/bin/activate"
+  - "pip install -r requirements.txt"
+script: pytest

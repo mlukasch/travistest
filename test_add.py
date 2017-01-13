@@ -1,5 +1,6 @@
-print("This is a test-module...")
 import unittest, add
+
+print("This is a test-module...")
 
 
 class AddTest(unittest.TestCase):
