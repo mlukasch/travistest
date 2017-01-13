@@ -16,8 +16,8 @@ script: pytest
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker build -f Dockerfile -t $REPO:$COMMIT .;
-    docker tag $REPO:$COMMIT $REPO:$TAG;
-    docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER;
-    docker push $REPO;
+    echo $REPO;
+    echo $COMMIT;
+    echo $TAG;
+    echo $TRAVIS_BUILD_NUMBER;
     fi
