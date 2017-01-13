@@ -16,8 +16,6 @@ script: pytest
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    echo "$REPO";
-    echo "$COMMIT";
-    echo "$TAG";
-    echo "$TRAVIS_BUILD_NUMBER";
+    docker build -t mluk/travistest:latest .;
+    docker push mluk/travistest:latest;
     fi
