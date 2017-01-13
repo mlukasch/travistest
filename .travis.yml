@@ -1,4 +1,11 @@
+env:
+  global:
+    - secure: "dFqxQ0vv40f7h0rQqzPxZoyvn258v/dROaWgwUV9M8GHhh5kn9oXS35PBWy9isP9AbTZbiT6jFQUxgwELbGJGj5NHo+85KaFynaIcI3arlT31H3qnLAx2UoGFLZH+JNR4Ij2uNPm1DoXotTc+SeGof+3h7Vcb4mlkwEz40lHrNZMFdZC7G3UrpvQuWS0bGavNotieaU8wsMsSik/o8t1hFHVcT3Qtpv5TFqKfNc3il2oS5Zl7KpCxFy5TN0j5pSQ9ttrtJ0aXB35299tdf+T8RLZ0O8bV3zH0pXVCA5v6F+Vi8XXb51REFjKfLHapVZeqLA4xoD1dxHE5V9FB8ZgjC0NcH/r3cQNea86n/hCD40+/cOl1RDnM4fLXSf57NYtXFcYZ4JO9Zd+PgEUiDT6BlqhKHbXlH41szS7/+AziuEOGcwbzXBqAlqSFtgYNW+3PCZYAX8kqAIcejj+LiOMqY4ZdiRYh8kSayYKoQtNGG5Qph5gXVIafIoO5X1ppmRTrEvCk0ypMjyXbD7o3UsAA+vEwFx+zzFBqs9MSl7noLUhS5ugM/XClbmvAHcvU9F2xfPQdiXPN+0lhytF8GVQQ02yjUyMmvT5geJa/OrKIQdR4Ixf6b65nbMwf774nxsxPLp8/u/+N0bjvDPggKLrqqvFPzV1mkil+h1mVTaMi14="
+    - secure: "H9Bd7z+DpDGQMAc8+IorrUmf/P8eAMQOHo6dsiPeU+g9iZEMS+q+64SC7BseoFCF0VtGv3NvBCZvfUAhmNMerffuloJK//QPfhK/eC8gmiXcVrbKN6j+8RwigdbmOaIJW7LziZpVq3/t4ePN64OKp/P/KSETbhYfYSWupXoVg9wxnI2UWxa8QPYyGT0cFfnl3MbsB+kT8aV4U6dHQKpJi0KCuICGw4ptKK5JdHYHCdXnBzK3hBncv6Qub4TEFdK9nVHfKEIiZwTnoPnVigf5m6rMYPlvIoS+A2N/EXWXprBA/DC7IERsKWaexbr4NCgpjQjL+o6accX8QTsUaH5ctnD56PEyDpVyHWE1+qviL7gV1ZkVVW0rSk+oiApFX/nM6TRCA6cxHs7nGa50pYS//x2ZKpzUWmcpaT9fiLxuWJzaNx3qIyJAVyIVtUti4Mi3cLWJOb7z8ucybs8VbtfEXTVj/tZMZ5/CDx3U3dA0IoFy7AD6XeklM37utMVajb39E/YAlzpannHmPi4gUhLz6Sz42nehGAwkGMWHlZj5OdexjF/cPX4qift26KrS164M5Ski55gjWBgYTkll4tWmOANawBJqfoTjL2g0AX9Xc1s8FCYBgA5HWG4ZWzEuWWCVl5cM5DLBpVQ81dpdrPwTjBwUhDAEeuu6xRJjnN43DX0="
 language: python
+sudo: required
+services:
+  - docker
 python:
   - "3.5"
 install:
@@ -6,3 +13,10 @@ install:
   - ". .env/bin/activate"
   - "pip install -r requirements.txt"
 script: pytest
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker build -t travistest:$COMMIT .
+    docker tag travistest:$COMMIT $REPO:travistest-$TRAVIS_BUILD_NUMBER
+    docker push $REPO;
+    fi
